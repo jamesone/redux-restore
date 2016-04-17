@@ -9,6 +9,7 @@ const restore = store => {
           promises.push(
             AsyncStorage.getItem(keys[index])
             .then(item => {
+              // If non JSON string, then simply return;
               var j;
               try { 
                 j = JSON.parse(item) 
