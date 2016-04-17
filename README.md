@@ -1,6 +1,6 @@
 ##redux-restore
 
-This is a simple wrapper around async storage that saves your store data to `AsyncStorage` in react native. Works with Android and iOS! Tested on `0.18`
+This is a simple wrapper around async storage that saves your store data to `AsyncStorage` in react native. Works with Android and iOS! Tested on `0.19`
 
 ##Install
 Head to my fork ~>
