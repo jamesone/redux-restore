@@ -9,9 +9,16 @@ const restore = store => {
           promises.push(
             AsyncStorage.getItem(keys[index])
             .then(item => {
+              var j;
+              try { 
+                j = JSON.parse(item) 
+              } catch (e) {
+                return;
+                throw e;
+              }
               let action = {
                 type: keys[index],
-                ...JSON.parse(item)
+                ...j
               }
               promises.push(store.dispatch(action))
             })
