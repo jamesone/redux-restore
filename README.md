@@ -3,12 +3,13 @@
 This is a simple wrapper around async storage that saves your store data to `AsyncStorage` in react native. Works with Android and iOS! Tested on `0.18`
 
 ##Install
-
+Head to my fork ~>
 ```js
-npm install redux-restore --save
+https://github.com/jamesone/redux-restore
 ```
 
 ##Setup
+This is my (jamesone) implementation of the redux-restore middleware, I'm currently using it with this exact setup and it's working well. If you spot anything wrong with it, let me know.
 
 ###Register Middleware
 
@@ -16,17 +17,29 @@ Create your store with the `storage` middleware
 
 ```js
 import { combineReducers, applyMiddleware, createStore } from 'redux'
-import items from './items'
+import name_of_reducer_that_you_want_persited from './name_of_reducer_that_you_want_persited'
+import other_name_of_reducer from './other_name_of_reducer'
 import authentication from './authentication' //reducer name
+
 import { storage } from 'redux-restore'
+import thunk from 'redux-thunk'; // You DON'T need this, but if you want you can use it!
+
+
+const showReduxStoreDevLogs = true; // If true, redux-restore prints out helpful debug information.
+const reduxRestoreStorage = storage ([
+  'name_of_reducer_that_you_want_persited',
+  'other_name_of_reducer',
+], showReduxStoreDevLogs);
 
 let createStoreWithMiddleware = applyMiddleware(
-  storage(['authentication']) //reducer name
+  thunk,
+  reduxRestoreStorage,
 )(createStore)
 
 let reducers = combineReducers({
-  items,
-  authentication
+  name_of_reducer_that_you_want_persited,
+  other_name_of_reducer,
+  authentication, // This won't be persited, unless you add it to the reduxRestoreStorage array
 })
 
 export default createStoreWithMiddleware(reducers)
@@ -58,14 +71,17 @@ export default class App extends React.Component {
 ###Add an action to your reducer
 
 ```js
-case 'authentication':
-  delete action.type
-  return Immutable.Map(action)
+name_of_reducer_that_you_want_persited.js:
+
+case 'name_of_action':
+  return {
+    ...state,
+    iWillBeSavedToAsyncStorage: action.foo,
+    bar: action.bar,
+  }
 ```
 
-Create a new case with the name of your reducer. This will be called with all of the stored state.
 
-That's it! You're all set!
 
 ###Conclusion
 
